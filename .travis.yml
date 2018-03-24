@@ -29,6 +29,7 @@ before_install:
 install:
 - composer create-project drupal/drupal $DRUPAL_PROJECT_DIR $SKELETON_VERSION # --no-install
 - if [[ -v $DRUPAL_PROJECT_DIR ]]; then cd $DRUPAL_PROJECT_DIR; else cd drupal; fi;
+- composer run-script drupal-phpunit-upgrade # for PHPUnit, Drupal 8.5 and PHP 7.2 or greater
 
 script:
 - vendor/bin/phpunit --configuration core --testsuite unit --color
