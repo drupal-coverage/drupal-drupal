@@ -1,0 +1,34 @@
+---
+language: php
+
+cache:
+  directories:
+  - $HOME/.composer/cache/files
+
+php:
+# - nightly
+- 7.2 # For Drupal 8.5+
+# - 7.1 # Recommanded for Drupal 8.4
+# - 7.0 # Debian 9
+# - 5.6 # Minimum for Drush 9, Debian 8
+# - 5.5 # Minimum for Drupal 8
+
+env:
+  global:
+  - DRUPAL_DEV_VERSION="8.6.x-dev"
+  # - DRUPAL_DEV_VERSION="^8.5@alpha"
+  # - PATH=$TRAVIS_BUILD_DIR:~/.composer/vendor/bin:$(pwd)/$DRUPAL_PROJECT_DIR/vendor/bin:$PATH # $(pwd) for bash source commands and files.
+
+before_install:
+- if [ -f /home/travis/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then phpenv config-rm xdebug.ini; fi
+# - composer global require --dev sensiolabs/security-checker
+
+# - pip install pygments # but now pygmentize is no more used right here.
+- go get -u github.com/jingweno/ccat
+
+install:
+- composer create-project drupal/drupal $DRUPAL_PROJECT_DIR $SKELETON_VERSION # --no-install
+- if [[ -v $DRUPAL_PROJECT_DIR ]]; then cd $DRUPAL_PROJECT_DIR; else cd drupal; fi;
+
+script:
+- vendor/bin/phpunit --configuration core --testsuite unit --color
