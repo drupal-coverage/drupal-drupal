@@ -32,4 +32,7 @@ install:
 - composer run-script drupal-phpunit-upgrade # for PHPUnit, Drupal 8.5 and PHP 7.2 or greater
 
 script:
-- vendor/bin/phpunit --configuration core --testsuite unit --color
+- phpdbg -qrr vendor/bin/phpunit --configuration core --testsuite unit --color --coverage-text
+
+after_script:
+- php core/scripts/run-tests.sh --list
